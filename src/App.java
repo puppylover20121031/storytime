@@ -1,5 +1,10 @@
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class App {
 
@@ -45,8 +50,29 @@ public class App {
             }
         }
 
+        writestory(1, lines);
+
         scanner.close();
 
+    }
+
+    public static void writestory(int storynum, String[] list) {
+        String desktopPath = System.getProperty("user.home") + "\\OneDrive\\Desktop\\story" + storynum + ".txt";
+        try {
+            StringBuilder content = new StringBuilder();
+            for (int i = 0; i < list.length; i++) {
+                if (list[i] != null && !list[i].isBlank()) {
+                    content.append(list[i]).append("\n");
+                }
+            }
+            // Create parent directory if it doesn't exist
+            Files.createDirectories(Paths.get(desktopPath).getParent());
+            Files.write(Paths.get(desktopPath), content.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+            System.out.println("Story written successfully to: " + desktopPath);
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }
